@@ -10,6 +10,8 @@ The code in the run_analysis.R script is intended to do the following:
 
 4)      Add in descriptive activity names by merging the dataset with the activity list based on activity ID
 
-5)      create a condensed dataset that contains the means of the data grouped by subject ID and activity ID
+5)      Create a loop to read through column names and substitute certain patterns to create more readable output and overwrite the previous column names
 
-6)      Export the condensed dataset
+6)      create a condensed dataset that contains the means of the data grouped by subject ID and activity ID
+
+7)      Export the condensed dataset
