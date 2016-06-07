@@ -1,5 +1,5 @@
 ## Set working directory to location with the files ##
-setwd("~/Desktop/UCI HAR Dataset")
+setwd("C:/Users/algo/Desktop/Coursera/Course Project/UCI HAR Dataset")
 library(dplyr)
 ## Read in datasets from Train and Test##
 features <- read.table('./features.txt', header = FALSE)
@@ -35,11 +35,30 @@ condensedData <- completeData[, columnsNeeded]
 finalData <- merge(condensedData, activityLabels, by='activityID', all.x = TRUE)
 finalData <- arrange(finalData, subjectID, activityID)
 
+##Clean up column names##
+columnNames <- colnames(finalData)
+for (i in 1:length(columnNames)) 
+{
+  columnNames[i] = gsub("\\()","",columnNames[i])
+  columnNames[i] = gsub("-std$","StdDev",columnNames[i])
+  columnNames[i] = gsub("-mean","Mean",columnNames[i])
+  columnNames[i] = gsub("^(t)","time",columnNames[i])
+  columnNames[i] = gsub("^(f)","freq",columnNames[i])
+  columnNames[i] = gsub("([Gg]ravity)","Gravity",columnNames[i])
+  columnNames[i] = gsub("([Bb]ody[Bb]ody|[Bb]ody)","Body",columnNames[i])
+  columnNames[i] = gsub("[Gg]yro","Gyro",columnNames[i])
+  columnNames[i] = gsub("AccMag","AccMagnitude",columnNames[i])
+  columnNames[i] = gsub("([Bb]odyaccjerkmag)","BodyAccJerkMagnitude",columnNames[i])
+  columnNames[i] = gsub("JerkMag","JerkMagnitude",columnNames[i])
+  columnNames[i] = gsub("GyroMag","GyroMagnitude",columnNames[i])
+};
+
+colnames(finalData) = columnNames
+
 ##create tidy data subset with only the means of each variable and subject##
 meandataset <- aggregate(finalData[,names(finalData)!=c("activityID","subjectID", "activityType")],
                          by=list(acitivityID=finalData$activityID, subjectID = finalData$subjectID),
                          mean, na.rm=TRUE)
 
 ##Export the dataset with the means by subject ID and acitivy##
-write.table(meandataset, "./courseprojectdataset.csv", row.names = TRUE, sep = ",")
-
+write.table(meandataset, "./courseprojectdataset.txt", row.names = TRUE, sep = ",")
